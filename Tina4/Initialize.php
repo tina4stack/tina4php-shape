@@ -66,7 +66,7 @@ function _abbr(...$elements): HTMLElement
  */
 function _acronym(...$elements): HTMLElement
 {
-    return new HTMLElement(":acronym", $elements);
+    return new HTMLElement(":abbr", $elements);
 }
 
 /**
@@ -96,7 +96,7 @@ function _applet(...$elements): HTMLElement
  */
 function _area(...$elements): HTMLElement
 {
-    return new HTMLElement(":area", $elements);
+    return new HTMLElement(":area/", $elements);
 }
 
 /**
@@ -146,7 +146,7 @@ function _b(...$elements): HTMLElement
  */
 function _base(...$elements): HTMLElement
 {
-    return new HTMLElement(":base", $elements);
+    return new HTMLElement(":base/", $elements);
 }
 
 /**
@@ -156,17 +156,17 @@ function _base(...$elements): HTMLElement
  */
 function _basefont(...$elements): HTMLElement
 {
-    return new HTMLElement(":basefont", $elements);
+    return new HTMLElement(":basefont/", $elements);
 }
 
 /**
- * HTML TAG _bb
+ * HTML TAG _bdi
  * @param $elements
  * @return HTMLElement
  */
-function _bb(...$elements): HTMLElement
+function _bdi(...$elements): HTMLElement
 {
-    return new HTMLElement(":bb", $elements);
+    return new HTMLElement(":bdi", $elements);
 }
 
 /**
@@ -216,7 +216,7 @@ function _body(...$elements): HTMLElement
  */
 function _br(...$elements): HTMLElement
 {
-    return new HTMLElement(":br/", $elements);
+    return new HTMLElement(":br //", $elements);
 }
 
 /**
@@ -286,7 +286,7 @@ function _code(...$elements): HTMLElement
  */
 function _col(...$elements): HTMLElement
 {
-    return new HTMLElement(":col", $elements);
+    return new HTMLElement(":col/", $elements);
 }
 
 /**
@@ -300,23 +300,13 @@ function _colgroup(...$elements): HTMLElement
 }
 
 /**
- * HTML TAG _command
+ * HTML TAG _data
  * @param $elements
  * @return HTMLElement
  */
-function _command(...$elements): HTMLElement
+function _data(...$elements): HTMLElement
 {
-    return new HTMLElement(":command", $elements);
-}
-
-/**
- * HTML TAG _datagrid
- * @param $elements
- * @return HTMLElement
- */
-function _datagrid(...$elements): HTMLElement
-{
-    return new HTMLElement(":datagrid", $elements);
+    return new HTMLElement(":data", $elements);
 }
 
 /**
@@ -436,17 +426,7 @@ function _em(...$elements): HTMLElement
  */
 function _embed(...$elements): HTMLElement
 {
-    return new HTMLElement(":embed", $elements);
-}
-
-/**
- * HTML TAG _eventsource
- * @param $elements
- * @return HTMLElement
- */
-function _eventsource(...$elements): HTMLElement
-{
-    return new HTMLElement(":eventsource", $elements);
+    return new HTMLElement(":embed/", $elements);
 }
 
 /**
@@ -550,6 +530,47 @@ function _h2(...$elements): HTMLElement
 }
 
 /**
+ * HTML TAG _h3
+ * @param $elements
+ * @return HTMLElement
+ */
+function _h3(...$elements): HTMLElement
+{
+    return new HTMLElement(":h3", $elements);
+}
+
+/**
+ * HTML TAG _h4
+ * @param $elements
+ * @return HTMLElement
+ */
+function _h4(...$elements): HTMLElement
+{
+    return new HTMLElement(":h4", $elements);
+}
+
+
+/**
+ * HTML TAG _h5
+ * @param $elements
+ * @return HTMLElement
+ */
+function _h5(...$elements): HTMLElement
+{
+    return new HTMLElement(":h5", $elements);
+}
+
+/**
+ * HTML TAG _h6
+ * @param $elements
+ * @return HTMLElement
+ */
+function _h6(...$elements): HTMLElement
+{
+    return new HTMLElement(":h6", $elements);
+}
+
+/**
  * HTML TAG _head
  * @param $elements
  * @return HTMLElement
@@ -586,7 +607,7 @@ function _hgroup(...$elements): HTMLElement
  */
 function _hr(...$elements): HTMLElement
 {
-    return new HTMLElement(":hr/", $elements);
+    return new HTMLElement(":hr //", $elements);
 }
 
 /**
@@ -636,7 +657,7 @@ function _img(...$elements): HTMLElement
  */
 function _input(...$elements): HTMLElement
 {
-    return new HTMLElement(":input", $elements);
+    return new HTMLElement(":input/", $elements);
 }
 
 /**
@@ -996,7 +1017,7 @@ function _small(...$elements): HTMLElement
  */
 function _source(...$elements): HTMLElement
 {
-    return new HTMLElement(":source", $elements);
+    return new HTMLElement(":source/", $elements);
 }
 
 /**
@@ -1047,6 +1068,16 @@ function _style(...$elements): HTMLElement
 function _sub(...$elements): HTMLElement
 {
     return new HTMLElement(":sub", $elements);
+}
+
+/**
+ * HTML TAG _sub
+ * @param $elements
+ * @return HTMLElement
+ */
+function _summary(...$elements): HTMLElement
+{
+    return new HTMLElement(":summary", $elements);
 }
 
 /**

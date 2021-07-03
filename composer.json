@@ -26,8 +26,7 @@
     "phpmetrics": "phpmetrics --report-html=phpmetrics --junit=tests/junit.xml ./Tina4",
     "start": "php -S localhost:7146 index.php"
   },
-  "require": {
-    "psr/log": "^1.1",
-    "twig/twig": "^3.3"
+  "config": {
+    "process-timeout": 0
   }
 }

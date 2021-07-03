@@ -10,7 +10,7 @@ namespace Tina4;
 /**
  * List of Html tags prefixed with a : for where the opening tag should go
  */
-const HTML_ELEMENTS = [":!DOCTYPE", ":!--", ":a", ":abbr", ":acronym", ":address", ":applet", ":area", ":article", ":aside", ":audio", ":b", ":base", ":basefont", ":bb", ":bdo", ":big", ":blockquote", ":body", ":br/", ":button", ":canvas", ":caption", ":center", ":cite", ":code", ":col", ":colgroup", ":command", ":datagrid", ":datalist", ":dd", ":del", ":details", ":dfn", ":dialog", ":dir", ":div", ":dl", ":dt", ":em", ":embed", ":eventsource", ":fieldset", ":figcaption", ":figure", ":font", ":footer", ":form", ":frame", ":frameset", ":h1", ":h2", ":h3", ":h4", ":h5", ":h6", ":h7", ":head", ":header", ":hgroup", ":hr/", ":html", ":i", ":iframe", ":img/", ":input", ":ins", ":isindex", ":kbd", ":keygen", ":label", ":legend", ":li", ":link", ":map", ":mark", ":menu", ":meta/", ":meter", ":nav", ":noframes", ":noscript", ":object", ":ol", ":optgroup", ":option", ":output", ":p", ":param", ":pre", ":progress", ":q", ":rp", ":rt", ":ruby", ":s", ":samp", ":script", ":section", ":select", ":small", ":source", ":span", ":strike", ":strong", ":style", ":sub", ":sup", ":table", ":tbody", ":td", ":textarea", ":tfoot", ":th", ":thead", ":time", ":title", ":tr", ":track", ":tt", ":u", ":ul", ":var", ":video", ":wbr"];
+const HTML_ELEMENTS = [":!DOCTYPE", ":!--", ":a", ":abbr", ":acronym", ":address", ":applet", ":area/", ":article", ":aside", ":audio", ":b", ":base/", ":basefont/", ":bdi", ":bdo", ":big", ":blockquote", ":body", ":br/", ":button", ":canvas", ":caption", ":center", ":cite", ":code", ":col/", ":colgroup", ":command", ":datagrid", ":datalist", ":dd", ":del", ":details", ":dfn", ":dialog", ":dir", ":div", ":dl", ":dt", ":em", ":embed/", ":eventsource", ":fieldset", ":figcaption", ":figure", ":font", ":footer", ":form", ":frame", ":frameset", ":h1", ":h2", ":h3", ":h4", ":h5", ":h6", ":h7", ":head", ":header", ":hgroup", ":hr/", ":html", ":i", ":iframe", ":img/", ":input", ":ins", ":isindex", ":kbd", ":keygen", ":label", ":legend", ":li", ":link", ":map", ":mark", ":menu", ":meta/", ":meter", ":nav", ":noframes", ":noscript", ":object", ":ol", ":optgroup", ":option", ":output", ":p", ":param", ":pre", ":progress", ":q", ":rp", ":rt", ":ruby", ":s", ":samp", ":script", ":section", ":select", ":small", ":source/", ":span", ":strike", ":strong", ":style", ":sub", ":sup", ":table", ":tbody", ":td", ":textarea", ":tfoot", ":th", ":thead", ":time", ":title", ":tr", ":track", ":tt", ":u", ":ul", ":var", ":video", ":wbr"];
 /**
  * A way to code HTML5 elements using only PHP
  * @package Tina4
@@ -36,53 +36,44 @@ class HTMLElement
 
     /**
      * HTMLElement constructor.
-     * @param mixed ...$elements
+     * @param mixed ...$params
      */
-    public function __construct(...$elements)
+    public function __construct(...$params)
     {
         //elements can be attributes or body parts
-        foreach ($elements as  $element) {
-            if (is_string($element) && in_array($element, HTML_ELEMENTS)) {
-                $this->tag = substr($element, 1);
-            } elseif (is_array($element)) {
-                $this->sortElements($element);
+        foreach ($params as  $param) {
+            if (is_string($param) && in_array($param, HTML_ELEMENTS)) {
+                $this->tag = substr($param, 1);
+            } elseif (is_array($param)) {
+                $this->determineParamType($param);
             } else {
-                $this->tag = substr($element, 1);
+                $this->tag = substr($param, 1);
             }
         }
-        //return $this;
     }
 
     /**
-     * Sort the elements
+     * Determines the param type, either it is an element or attribute
      * @param $element
      */
-    private function sortElements($element): void
+    private function determineParamType($element): void
     {
         foreach ($element as $pId => $param) {
             if (is_array($param)) {
-                $this->sortElements($param);
+                $this->attributes[] = $param;
+                continue;
+            }
+
+            if (is_object($param) && get_class($param) === "Tina4\HTMLElement" || is_numeric($pId)) {
+                $this->elements[] = $param;
             } else {
-                if (is_object($param)) {
-                    if (get_class($param) === "Tina4\HTMLElement") {
-                        $this->elements[] = $param;
-                    } else {
-                        if (!empty($param)) {
-                            echo "DEBUG {$param}";
-                        }
-                    }
+               if ($pId == "_" || $pId == "" || $pId == " ") {
+                    $this->attributes[] = [$param];
                 } else {
-                    if (is_numeric($pId)) {
-                        $this->elements[] = $param;
-                    } else {
-                        if ($pId == "_" || $pId == "" || $pId == " ") {
-                            $this->attributes[] = [$param];
-                        } else {
-                            $this->attributes[] = [$pId => $param];
-                        }
-                    }
+                    $this->attributes[] = [$pId => $param];
                 }
             }
+
         }
     }
 
@@ -93,27 +84,25 @@ class HTMLElement
     public function __toString(): string
     {
         //Check what type of tag
-        if ($this->tag === "document") {
+        if ($this->tag === "document" || $this->tag === "") {
             $html = "{$this->getElements()}";
-        } elseif ($this->tag === "") {
-            $html =  "{$this->getElements()}";
         } elseif ($this->tag[0] === "!") {
             if (strpos($this->tag, "!--") !== false) {
-                $html =  "<$this->tag{$this->getAttributes()}{$this->getElements()}" . substr($this->tag, 1) . ">";
+                $html =  "<$this->tag{$this->getAttributes()}{$this->getElements()}" . substr($this->tag, 1) . ">"; //tag like <!--
             } else {
-                $html =  "<$this->tag{$this->getAttributes()}>";
+                $html =  "<$this->tag{$this->getAttributes()}{$this->getElements()}>"; //tag like <!DOCTYPE html>
             }
         } elseif ($this->tag[strlen($this->tag) - 1] === "/") {
-            $html =  "<$this->tag{$this->getAttributes()}>{$this->getElements()}";
+            $html =  "<".substr($this->tag, 0,-1)."{$this->getAttributes()}{$this->getElements()}>"; // tag like <img> or <area>
         } else {
-            $html =  "<$this->tag{$this->getAttributes()}>{$this->getElements()}</{$this->tag}>";
+            $html =  "<$this->tag{$this->getAttributes()}>{$this->getElements()}</{$this->tag}>"; //normal tag <a></a>
         }
 
         return $html;
     }
 
     /**
-     * Gets all the elements
+     * Gets all the elements which are HTML tags
      * @return string
      */
     private function getElements(): string
@@ -126,7 +115,7 @@ class HTMLElement
     }
 
     /**
-     * Gets all the attributes for an HTML element
+     * Gets all the attributes for an HTML element, class is a good example
      * @return string
      */
     private function getAttributes(): string
