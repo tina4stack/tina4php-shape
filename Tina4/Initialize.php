@@ -2,6 +2,7 @@
 
 use Tina4\HTMLElement;
 
+
 /**
  * Encloses all shape variables
  * @param mixed ...$elements
@@ -490,16 +491,6 @@ function _form(...$elements): HTMLElement
 }
 
 /**
- * HTML TAG _frame
- * @param $elements
- * @return HTMLElement
- */
-function _frame(...$elements): HTMLElement
-{
-    return new HTMLElement(":frame", $elements);
-}
-
-/**
  * HTML TAG _frameset
  * @param $elements
  * @return HTMLElement
@@ -671,16 +662,6 @@ function _ins(...$elements): HTMLElement
 }
 
 /**
- * HTML TAG _isindex
- * @param $elements
- * @return HTMLElement
- */
-function _isindex(...$elements): HTMLElement
-{
-    return new HTMLElement(":isindex", $elements);
-}
-
-/**
  * HTML TAG _kbd
  * @param $elements
  * @return HTMLElement
@@ -690,15 +671,6 @@ function _kbd(...$elements): HTMLElement
     return new HTMLElement(":kbd", $elements);
 }
 
-/**
- * HTML TAG _keygen
- * @param $elements
- * @return HTMLElement
- */
-function _keygen(...$elements): HTMLElement
-{
-    return new HTMLElement(":keygen", $elements);
-}
 
 /**
  * HTML TAG _label
@@ -737,7 +709,7 @@ function _li(...$elements): HTMLElement
  */
 function _link(...$elements): HTMLElement
 {
-    return new HTMLElement(":link", $elements);
+    return new HTMLElement(":link/", $elements);
 }
 
 /**
@@ -760,15 +732,6 @@ function _mark(...$elements): HTMLElement
     return new HTMLElement(":mark", $elements);
 }
 
-/**
- * HTML TAG _menu
- * @param $elements
- * @return HTMLElement
- */
-function _menu(...$elements): HTMLElement
-{
-    return new HTMLElement(":menu", $elements);
-}
 
 /**
  * HTML TAG _meta
@@ -887,7 +850,17 @@ function _p(...$elements): HTMLElement
  */
 function _param(...$elements): HTMLElement
 {
-    return new HTMLElement(":param", $elements);
+    return new HTMLElement(":param/", $elements);
+}
+
+/**
+ * HTML TAG _param
+ * @param $elements
+ * @return HTMLElement
+ */
+function _picture(...$elements): HTMLElement
+{
+    return new HTMLElement(":picture", $elements);
 }
 
 /**
@@ -1197,7 +1170,7 @@ function _tr(...$elements): HTMLElement
  */
 function _track(...$elements): HTMLElement
 {
-    return new HTMLElement(":track", $elements);
+    return new HTMLElement(":track/", $elements);
 }
 
 /**
