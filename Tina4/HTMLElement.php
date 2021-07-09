@@ -41,11 +41,11 @@ class HTMLElement
     public function __construct(...$params)
     {
         //elements can be attributes or body parts
-        foreach ($params as  $param) {
+        foreach ($params as $index =>  $param) {
             if (is_string($param) && in_array($param, HTML_ELEMENTS)) {
                 $this->tag = substr($param, 1);
             } elseif (is_array($param)) {
-                $this->determineParamType($param);
+                $this->determineParamType($param, $index);
             } else {
                 $this->tag = substr($param, 1);
             }
@@ -55,25 +55,20 @@ class HTMLElement
     /**
      * Determines the param type, either it is an element or attribute
      * @param $element
+     * @param $index
      */
-    private function determineParamType($element): void
+    private function determineParamType($element, $index=0): void
     {
-        foreach ($element as $pId => $param) {
+        foreach ($element as $key => $param) {
             if (is_array($param)) {
-                $this->attributes[] = $param;
-                continue;
-            }
-
-            if (is_object($param) && get_class($param) === "Tina4\HTMLElement" || is_numeric($pId)) {
-                $this->elements[] = $param;
+                $this->determineParamType($param, $key);
             } else {
-               if ($pId == "_" || $pId == "" || $pId == " ") {
-                    $this->attributes[] = [$param];
+                if ($index === 0 && !is_object($param)) {
+                    $this->attributes[] = [$key => $param];
                 } else {
-                    $this->attributes[] = [$pId => $param];
+                    $this->elements[] = $param;
                 }
             }
-
         }
     }
 
@@ -85,7 +80,7 @@ class HTMLElement
     {
         //Check what type of tag
         if ($this->tag === "document" || $this->tag === "") {
-            $html = "{$this->getElements()}";
+            $html = (string)($this->getElements());
         } elseif ($this->tag[0] === "!") {
             if (strpos($this->tag, "!--") !== false) {
                 $html =  "<$this->tag{$this->getAttributes()}{$this->getElements()}" . substr($this->tag, 1) . ">"; //tag like <!--
@@ -125,7 +120,7 @@ class HTMLElement
             if (is_array($attribute)) {
                 foreach ($attribute as $key => $value) {
                     if (is_numeric($key)) {
-                        $html .= " {$value}";
+                        $html .= "{$value}";
                     } else {
                         if (is_bool($value)) {
                             if ($value) {
@@ -135,11 +130,14 @@ class HTMLElement
                             }
                         }
                         if ($value !== null) {
-                            $html .= " {$key}=\"{$value}\"";
+                            $html .= "{$key}=\"{$value}\" ";
                         }
                     }
                 }
             }
+        }
+        if (!empty($html)) {
+            $html  = " ".trim($html);
         }
         return $html;
     }

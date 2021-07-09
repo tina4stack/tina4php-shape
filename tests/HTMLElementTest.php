@@ -9,13 +9,28 @@ use PHPUnit\Framework\TestCase;
 class HTMLElementTest extends TestCase
 {
 
+    final function testEmbedding(): void
+    {
+        $lis = [];
+
+
+        $lis[] = _li(["id" => "1"], "hello");
+        $lis[] = _li("hello");
+
+        $ul = _ul($lis);
+
+        $this->assertEquals("<ul><li id=\"1\">hello</li><li>hello</li></ul>", $ul."");
+    }
+
     function testHTMLElement(): void
     {
         $htmlElement = new \Tina4\HTMLElement(":h1",  ["Hello"]);
         $this->assertEquals("<h1>Hello</h1>", $htmlElement."" );
     }
 
-    function testElements(): void
+
+
+    final function testElements(): void
     {
         //$this->assertEquals("<></>",  _([])."");
         $this->assertEquals("<!--Some Comments-->",  _comment("Some Comments")."");
@@ -117,4 +132,7 @@ class HTMLElementTest extends TestCase
         $this->assertEquals('<video width="320" height="240" controls></video>', _video(["width" => "320", "height" => "240", "controls"])."");
         $this->assertEquals('<wbr>Some text</wbr>',  _wbr("Some text")."");
     }
+
+
+
 }
