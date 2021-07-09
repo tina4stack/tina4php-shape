@@ -54,20 +54,18 @@ class HTMLElement
 
     /**
      * Determines the param type, either it is an element or attribute
-     * @param $element
-     * @param $index
+     * @param mixed $element
+     * @param int $index
      */
-    private function determineParamType($element, $index=0): void
+    private function determineParamType($element, int $index=0): void
     {
         foreach ($element as $key => $param) {
             if (is_array($param)) {
                 $this->determineParamType($param, $key);
+            } else if ($index === 0 && !is_object($param)) {
+                $this->attributes[] = [$key => $param];
             } else {
-                if ($index === 0 && !is_object($param)) {
-                    $this->attributes[] = [$key => $param];
-                } else {
-                    $this->elements[] = $param;
-                }
+                $this->elements[] = $param;
             }
         }
     }
@@ -92,7 +90,6 @@ class HTMLElement
         } else {
             $html =  "<$this->tag{$this->getAttributes()}>{$this->getElements()}</{$this->tag}>"; //normal tag <a></a>
         }
-
         return $html;
     }
 
@@ -120,15 +117,9 @@ class HTMLElement
             if (is_array($attribute)) {
                 foreach ($attribute as $key => $value) {
                     if (is_numeric($key)) {
-                        $html .= "{$value}";
+                        $html .= (string)($value);
                     } else {
-                        if (is_bool($value)) {
-                            if ($value) {
-                                $value = "true";
-                            } else {
-                                $value = "false";
-                            }
-                        }
+                        is_bool($value) ? ($value === true) ? ($value = "true") : ($value = "false") : null;
                         if ($value !== null) {
                             $html .= "{$key}=\"{$value}\" ";
                         }
@@ -140,6 +131,69 @@ class HTMLElement
             $html  = " ".trim($html);
         }
         return $html;
+    }
+
+    /**
+     * Finds an html element by id
+     * @param string $id The name of the id of the element we are looking for
+     * @return $this
+     */
+    final public function byId(string $id): ?HTMLElement
+    {
+        if ($this->attributeExists("id", $id)) {
+            return $this;
+        }
+
+        return $this->findById($id, $this->elements);
+    }
+
+    /**
+     * Checks if there is an attribute with the value
+     * @param string $name Name of the attribute
+     * @param string $value Value of the attribute
+     * @return bool
+     */
+    final public function attributeExists(string $name, string $value): bool
+    {
+        foreach ($this->attributes as $attribute ){
+            if(isset($attribute[$name]) && $attribute[$name] === $value){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Recursive scan
+     * @param string $id
+     * @param mixed $elements
+     * @return $this
+     */
+    final public function findById(string $id, $elements): ?HTMLElement
+    {
+        //Iterate through all the elements to find an element by id
+        foreach ($elements as $element) {
+            if (is_object($element) && $element instanceof self) {
+                if ($element->attributeExists("id", $id)) {
+                    return $element;
+                }
+
+                $found = $element->byId($id);
+                if ($found !== null) {
+                    return $found;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Sets the element's "html" part to value
+     * @param mixed $html
+     */
+    public function html($html): void
+    {
+        $this->elements = [$html];
     }
 }
 

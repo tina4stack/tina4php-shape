@@ -14,12 +14,17 @@ class HTMLElementTest extends TestCase
         $lis = [];
 
 
-        $lis[] = _li(["id" => "1"], "hello");
-        $lis[] = _li("hello");
+        $lis[] = _li(["id" => "test"], "hello");
+        $lis[] = _li("hello",  _p(_div(["id" => "hello"], "mmmm")));
 
         $ul = _ul($lis);
 
-        $this->assertEquals("<ul><li id=\"1\">hello</li><li>hello</li></ul>", $ul."");
+        $html = _html($ul);
+
+        $html->byId("test")->html("Ok!");
+        $html->byId("hello")->html("Ok!");
+
+        $this->assertEquals("<ul><li id=\"test\">Ok!</li><li>hello<p><div id=\"hello\">Ok!</div></p></li></ul>", $ul."");
     }
 
     function testHTMLElement(): void
