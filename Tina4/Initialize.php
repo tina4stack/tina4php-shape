@@ -27,8 +27,6 @@ function _doctype(...$elements): HTMLElement
  * HTML TAG comment
  * @param $elements
  * @return HTMLElement
- * @tests tina4
- *   assert ("hello") == '<!--hello-->', "Comment test"
  */
 function _comment(...$elements): HTMLElement
 {
@@ -39,9 +37,6 @@ function _comment(...$elements): HTMLElement
  * HTML TAG _a
  * @param $elements
  * @return HTMLElement
- * @tests tina4
- *   assert ("home")."" == "<a>home</a>", "Anchor Test"
- *   assert (["href" => "#"],"home")."" == '<a href="#">home</a>', "Anchor Test Href"
  */
 function _a(...$elements): HTMLElement
 {
@@ -52,8 +47,6 @@ function _a(...$elements): HTMLElement
  * HTML TAG _abbr
  * @param $elements
  * @return HTMLElement
- * @tests tina4
- *   assert ("test")."" === "<abbr>test</abbr>","Abbr tag is not working"
  */
 function _abbr(...$elements): HTMLElement
 {
